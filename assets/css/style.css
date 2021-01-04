@@ -30,7 +30,7 @@ box-sizing: border-box;
     padding: 20px;
     display: flex;
     min-height: 90vh;
-    flex-direction: column;
+    flex-direction: column; 
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     
   }
@@ -45,11 +45,12 @@ box-sizing: border-box;
   }
 
   .question-wrapper {
-      flex: 1;
+      flex:1;
       margin: 0 20px 20px;
   }
 
     .question-list{
+      flex:1;
       list-style: none;
     }
 
@@ -59,14 +60,13 @@ box-sizing: border-box;
     margin: 5px;
     text-align: left;
     color: white;
-    display: flex;
-    flex-direction: column;
+    display: flex;    
     flex: 1;
     padding: 10px 15px;
     background: var(--primary);
     font-size: 0.9rem;
     border-radius: 10px;
-    position: relative;
+    position:relative;
     top: -3px;
     box-shadow: 0 3px var(--grey);
     width: 50%;
