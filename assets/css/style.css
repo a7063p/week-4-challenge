@@ -45,16 +45,23 @@ box-sizing: border-box;
   }
 
   .question-wrapper {
+    
       flex:1;
+      justify-content: flex-start;
       margin: 0 20px 20px;
   }
 
     .question-list{
       flex:1;
+      justify-content: flex-start;
       list-style: none;
+      padding: 0;
+
     }
 
-  .btn {
+   
+
+  .btn, .start-btn {
     outline: none;
     border: none;
     margin: 5px;
@@ -69,9 +76,18 @@ box-sizing: border-box;
     position:relative;
     top: -3px;
     box-shadow: 0 3px var(--grey);
-    width: 50%;
+    width: 200px;
     cursor: pointer;
   }
+
+  .start-btn {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    width: auto;
+  }
+
+
   
   .btn:hover {
     box-shadow: 0 2px var(--grey);
@@ -81,4 +97,10 @@ box-sizing: border-box;
       background-color: var(--secondary);
     box-shadow: 0 0px var(--grey);
     top: 0;
+    
   }
+
+  .answer-response {
+    font-size: 25px;
+    text-align: left;
+      }
