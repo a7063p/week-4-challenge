@@ -3,12 +3,18 @@ var divGroupEl = document.querySelector("#page-content");
 var answerButton = document.querySelector("#page-content")
 var startButton = document.querySelector("#page-content")
 var timerEl = document.querySelector("#timer");
+// var initialInput = document.querySelector('#initial-id');
+var initialButton = document.querySelector('#page-content')
 
 
 var answerBtnId = 0;
 var ansIndex = 0;
 var timerLeft = 60;
+timerEl.textContent = 60;
 var indexValue= 0;
+var endGame = false;
+var endQuestions = false;
+var viewHighScore = [];
 
 
 
@@ -31,12 +37,17 @@ var startQuiz = function () {
         quizDetailsEl.setAttribute('style', 'font-size:15px; font-weight lighter; text-align:center;')
         startDivEl.appendChild(quizDetailsEl);
 
+        var startBtnDivEl = document.createElement('div');
+        startBtnDivEl.className = ('button-wrapper')
+        startDivEl.appendChild(startBtnDivEl);
+
         var startBtnEl = document.createElement('button')
         startBtnEl.textContent = "Start Quiz";
         startBtnEl.className = "start-btn";
         startBtnEl.id = "start-btn-id"
+        startBtnEl.setAttribute("style", "text-align:center;")
         startBtnEl.type = "button"
-        startDivEl.appendChild(startBtnEl);
+        startBtnDivEl.appendChild(startBtnEl);
     };    
 
 startQuiz();
@@ -44,27 +55,23 @@ startQuiz();
 //----------Timer----------------------//
 
 
-function countdown() {
+function countdown() { 
     
 
     var setTimeInterval = setInterval(function() {
-        if (timerLeft > 1) {
-            timerEl.textContent = timerLeft;
-
-            timerLeft--;
-        } else {
-            timerEl.textContent = 0;
-            clearInterval(setTimeInterval)
-            
-        }
-    }, 1000)
-    
-  }
-  
+        if (timerLeft === 0 || endGame === true ){
+        clearInterval(setTimeInterval);
+        timerEl.textContent=timerLeft;  
+        highScoreHandler();      
+        } else if (timerLeft >= 1 ) {
+        timerEl.textContent = timerLeft;
+        timerLeft--;
+    } 
+    },250);    
+};
 
   //-------------Start Button------------------//
 //--------------------------------------------//
-
 
 
 var startButtonHandler = function (event) {
@@ -100,8 +107,9 @@ var testIndex = function() {
     for (var i =0; i < questionRepo.length; i++) {       
             
             var testObj = questionRepo[indexValue]            
-            if( testObj === undefined) {
-                alert("done")
+            if( testObj === undefined) { 
+                endGame= true
+                endQuestions = true            
                 return; 
             }
             else {
@@ -113,21 +121,10 @@ var testIndex = function() {
             return;        
              
          }
-        }
+    }
         
-       }
+}
 
-
-// var question = function () {    
-
-//     var testObj ={
-//         question: "What is JavaScript",
-//         answers: ["funny", "coffee", "sup", "Dont Know", "program"],
-//         correctAnswer: "sup" 
-//     } 
-//     createQuestion(testObj)    
-// };
-  
 
 //-------Create Questions--------------//
 
@@ -172,9 +169,11 @@ var testIndex = function() {
 
 // --------Create Response Div------------//
 //----------------------------------------//
+
 var wrongAnswer = function() {
+    
     var incorrectEl = document.createElement('div');
-        incorrectEl.className = "answer-response";
+        incorrectEl.className = ('answer-wrapper');
         incorrectEl.id = "div-two-id"; 
         divGroupEl.appendChild(incorrectEl) 
     
@@ -183,9 +182,10 @@ var wrongAnswer = function() {
         incorrectEl.appendChild(incorrectResponse);
 };
 
+
 var correctAnswer = function() {
     var correctEl = document.createElement('div');
-    correctEl.className = "answer-response";
+    correctEl.className = "answer-wrapper";
     correctEl.id = "div-two-id"; 
     divGroupEl.appendChild(correctEl); 
 
@@ -196,8 +196,17 @@ var correctResponse = document.createElement('p');
 
 //-------------------------------------------//
 //-------------All Done----------------------//
-var highScore = function () {
+var highScoreHandler = function () {
+    if(endGame === false) {
+        deleteQuestion();
+        highScore();
+    } else {
+        highScore();
+    }
+};
 
+
+var highScore = function () {
    
     var allDoneDivEl = document.createElement('div');
         divGroupEl.appendChild(allDoneDivEl);
@@ -216,8 +225,8 @@ var highScore = function () {
     
 
     var allDoneLabelEl = document.createElement('label');
-        allDoneLabelEl.textContent = ('Enter Initials ');
-        allDoneLabelEl.setAttribute("for", "password");
+        allDoneLabelEl.textContent = ('Enter Initials: ');
+        allDoneLabelEl.setAttribute("for", "initial");
         allDoneFormEl.appendChild(allDoneLabelEl);
 
     var allDoneInputEl = document.createElement('input');
@@ -230,10 +239,46 @@ var highScore = function () {
     var allDoneButtonEl = document.createElement('button');
         allDoneButtonEl.textContent = "Submit";
         allDoneButtonEl.type = ('button');
-        allDoneLabelEl.appendChild(allDoneButtonEl);
+        allDoneButtonEl.className = "all-done-btn";
+        allDoneButtonEl.id = "all-done-btn-id"
+        allDoneButtonEl.setAttribute("style", "text-align:center;")
+        allDoneLabelEl.appendChild(allDoneButtonEl); 
+
+}
+
+var initialInput = function () {
+    var initials = document.querySelector('#initial-id').value;
+    var score = timerLeft
+    if (initials === '') {
+        initials = "High Score";
+        localStorage.setItem("initials", JSON.stringify(initials));
+        localStorage.setItem("score", JSON.stringify(score));
+        
+   } else {
+    localStorage.setItem("initials", JSON.stringify(initials));
+    localStorage.setItem("score", JSON.stringify(score));
+   }
+   
+//    initials = localStorage.getItem("initials")
+//    score = localStorage.getItem("score")
+//    viewHighScore.push([{int: initials},{scr: score}],)
+   
+
+  
+
+};
 
 
 
+
+
+//--------------initial button----------------//
+var initialButtonHandler = function(event) {
+    event.preventDefault()
+    if(event.target.matches('#all-done-btn-id')) {
+        console.log(event.target);
+        initialInput()
+    }
 }
 
 
@@ -272,8 +317,7 @@ var delayChange = function() {
     answerBtnId=0;
     deleteQuestion()
     deleteResponse()
-    testIndex()
-    
+    testIndex()    
 }
 
 //-------------------Delete Functions----------------//
@@ -289,16 +333,11 @@ var deleteResponse = function () {
 
 /////////////////////////////////////////////////////
 
-//----------------Events-----------------------------//
+//----------------EventsListeners-----------------------------//
 
 answerButton.addEventListener("click", answerButtonHandler)
-startButton.addEventListener("click", startButtonHandler)
-
-
-
-
-   
-
+startButton.addEventListener("click", startButtonHandler)   
+initialButton.addEventListener("click", initialButtonHandler)
 //------------------------------------------------------------------//
 
 

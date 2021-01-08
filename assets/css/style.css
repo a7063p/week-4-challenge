@@ -30,12 +30,13 @@ box-sizing: border-box;
     padding: 20px;
     display: flex;
     min-height: 90vh;
+    max-height: 300px;
     flex-direction: column; 
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     
   }
 
-  .page-content {
+    .page-content {
     flex: 1;
     display: flex;
     flex-wrap: wrap;
@@ -44,28 +45,55 @@ box-sizing: border-box;
     width: 50%;
   }
 
-  .question-wrapper {
+     .button-wrapper {
     
-      flex:1;
-      justify-content: flex-start;
-      margin: 0 20px 20px;
-  }
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      width: auto;
+      
+      } 
 
-    .question-list{
-      flex:1;
-      justify-content: flex-start;
-      list-style: none;
-      padding: 0;
-
-    }
-
-   
-
-  .btn, .start-btn {
+    .start-btn {
+    text-align: center;
     outline: none;
     border: none;
-    margin: 5px;
-    text-align: left;
+    margin: 5px;    
+    color: white;
+    display: flex;    
+    justify-content: center;
+    padding: 10px 15px;
+    background: var(--primary);
+    font-size: 0.9rem;
+    border-radius: 10px;
+    position:relative;
+    top: -3px;
+    box-shadow: 0 3px var(--grey);
+    width: 200px;
+    cursor: pointer;
+    } 
+
+    .all-done-btn {
+    text-align: center;
+    outline: none;
+    border: none;
+    margin: 5px;    
+    color: white;
+    padding: 5px 5px;
+    background: var(--primary);
+    font-size: 0.9rem;
+    border-radius: 5px;    
+    top: -3px;
+    box-shadow: 0 3px var(--grey);
+    width: auto;
+    cursor: pointer;
+    }
+
+
+  .btn {
+    outline: none;
+    border: none;
+    margin: 5px;    
     color: white;
     display: flex;    
     flex: 1;
@@ -77,30 +105,32 @@ box-sizing: border-box;
     top: -3px;
     box-shadow: 0 3px var(--grey);
     width: 200px;
-    cursor: pointer;
+    cursor: pointer;        
   }
 
-  .start-btn {
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    width: auto;
-  }
-
-
-  
-  .btn:hover {
+ 
+  .btn:hover,
+  .start-btn:hover {
     box-shadow: 0 2px var(--grey);
     top: -2px;
   }
-  .btn:active {
-      background-color: var(--secondary);
+  .btn:active,
+  .start-btn:active {
+    background-color: var(--secondary);
     box-shadow: 0 0px var(--grey);
     top: 0;
     
   }
 
-  .answer-response {
+  .question-list{
+    list-style: none;
+  }
+
+  .answer-wrapper {
+    display: flex;
+    flex:1;
+    
     font-size: 25px;
     text-align: left;
-      }
+    height: 50px;
+      } 
