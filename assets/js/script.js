@@ -3,7 +3,6 @@ var divGroupEl = document.querySelector("#page-content");
 var answerButton = document.querySelector("#page-content")
 var startButton = document.querySelector("#page-content")
 var timerEl = document.querySelector("#timer");
-// var initialInput = document.querySelector('#initial-id');
 var initialButton = document.querySelector('#page-content')
 
 
@@ -16,14 +15,12 @@ var endGame = false;
 var endQuestions = false;
 var viewHighScore = [];
 
-
-
 // ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
 var startQuiz = function () {
     var startDivEl = document.createElement('div');
-    startDivEl.className = "question-wrapper";
+    startDivEl.className = "start-wrapper";
     startDivEl.id = "div-id";    
         divGroupEl.appendChild(startDivEl);
     
@@ -38,7 +35,7 @@ var startQuiz = function () {
         startDivEl.appendChild(quizDetailsEl);
 
         var startBtnDivEl = document.createElement('div');
-        startBtnDivEl.className = ('button-wrapper')
+        startBtnDivEl.className = 'button-wrapper';
         startDivEl.appendChild(startBtnDivEl);
 
         var startBtnEl = document.createElement('button')
@@ -50,7 +47,7 @@ var startQuiz = function () {
         startBtnDivEl.appendChild(startBtnEl);
     };    
 
-startQuiz();
+    startQuiz();
 
 //----------Timer----------------------//
 
@@ -67,7 +64,7 @@ function countdown() {
         timerEl.textContent = timerLeft;
         timerLeft--;
     } 
-    },250);    
+    },1000);    
 };
 
   //-------------Start Button------------------//
@@ -136,7 +133,7 @@ var testIndex = function() {
         console.log("Yes" + ansIndex);
         // //---------------------------------------//
         var questionDivEl = document.createElement('div');
-        questionDivEl.className = "question-wrapper";
+        questionDivEl.className = "wrapper";
         questionDivEl.id = "div-id";    
         divGroupEl.appendChild(questionDivEl);
 
@@ -171,9 +168,11 @@ var testIndex = function() {
 //----------------------------------------//
 
 var wrongAnswer = function() {
+    answerButton.removeEventListener("click", answerButtonHandler)
+    
     
     var incorrectEl = document.createElement('div');
-        incorrectEl.className = ('answer-wrapper');
+        incorrectEl.className = 'answer-wrapper';
         incorrectEl.id = "div-two-id"; 
         divGroupEl.appendChild(incorrectEl) 
     
@@ -184,6 +183,7 @@ var wrongAnswer = function() {
 
 
 var correctAnswer = function() {
+    answerButton.removeEventListener("click", answerButtonHandler)
     var correctEl = document.createElement('div');
     correctEl.className = "answer-wrapper";
     correctEl.id = "div-two-id"; 
@@ -209,6 +209,7 @@ var highScoreHandler = function () {
 var highScore = function () {
    
     var allDoneDivEl = document.createElement('div');
+        allDoneDivEl.className= "wrapper"
         divGroupEl.appendChild(allDoneDivEl);
 
         
@@ -247,30 +248,70 @@ var highScore = function () {
 }
 
 var initialInput = function () {
-    var initials = document.querySelector('#initial-id').value;
-    var score = timerLeft
-    if (initials === '') {
-        initials = "High Score";
-        localStorage.setItem("initials", JSON.stringify(initials));
-        localStorage.setItem("score", JSON.stringify(score));
-        
-   } else {
-    localStorage.setItem("initials", JSON.stringify(initials));
-    localStorage.setItem("score", JSON.stringify(score));
-   }
-   
-//    initials = localStorage.getItem("initials")
-//    score = localStorage.getItem("score")
-//    viewHighScore.push([{int: initials},{scr: score}],)
-   
-
-  
-
+    var score = timerLeft;
+    var initial = document.querySelector('#initial-id').value
+    console.log(initial);
+    var high = initial.toUpperCase() + "-" + score        
+    viewHighScore.push(high)
+    localStorage.setItem("initials", JSON.stringify(viewHighScore))
+       
 };
 
+var loadInitials = function () {
+    if(localStorage.getItem("initials")=== null){
+        return false 
+    } else
+    viewHighScore = localStorage.getItem("initials");    
+    
+    console.log("Found High Scores")
+    viewHighScore = JSON.parse(viewHighScore);
+    console.log(viewHighScore);
+}
+//--------------------------------------------//
+
+var highScoreList = function () {
+
+var scoreListEl = document.createElement('div');
+scoreListEl.className = "wrapper"
+divGroupEl.appendChild(scoreListEl);
 
 
+var scoreListTitleEl = document.createElement('h2');
+scoreListTitleEl.textContent = "High Scores"
+scoreListEl.appendChild(scoreListTitleEl);
 
+
+var scoreListUl = document.createElement('ul');
+    scoreListUl.className = "score-list";
+    scoreListEl.appendChild(scoreListUl);
+
+  for (var i = 0; i < viewHighScore.length; i++) {
+var scoreListLi = document.createElement("li");
+scoreListLi.textContent = viewHighScore[i];
+scoreListUl.appendChild(scoreListLi);
+}
+
+var scoreBtnDivEl = document.createElement('div');
+        scoreBtnDivEl.className = ('wrapper')
+        scoreListEl.appendChild(scoreBtnDivEl);
+
+        var goBackBtnEl = document.createElement('button')
+        goBackBtnEl.textContent = "Go Back";
+        goBackBtnEl.className = "go-back-btn";
+        goBackBtnEl.id = "go-back-btn-id"
+        goBackBtnEl.setAttribute("style", "text-align:center;")
+        goBackBtnEl.type = "button"
+        scoreBtnDivEl.appendChild(goBackBtnEl);
+
+
+        var clearScoreBtnEl = document.createElement('button')
+        clearScoreBtnEl.textContent = "Clear High Score";
+        clearScoreBtnEl.className = "clear-score-btn";
+        clearScoreBtnEl.id = "clear-score-btn-id"
+        clearScoreBtnEl.setAttribute("style", "text-align:center;")
+        clearScoreBtnEl.type = "button"
+        scoreBtnDivEl.appendChild(clearScoreBtnEl);
+}
 
 //--------------initial button----------------//
 var initialButtonHandler = function(event) {
@@ -278,7 +319,10 @@ var initialButtonHandler = function(event) {
     if(event.target.matches('#all-done-btn-id')) {
         console.log(event.target);
         initialInput()
+        // highScoreList()
+        
     }
+    
 }
 
 
@@ -323,6 +367,7 @@ var delayChange = function() {
 //-------------------Delete Functions----------------//
 
 var deleteQuestion = function () {
+    answerButton.addEventListener("click", answerButtonHandler)
     var divSelected = document.querySelector("#div-id");
     divSelected.remove()    
 }
@@ -335,9 +380,13 @@ var deleteResponse = function () {
 
 //----------------EventsListeners-----------------------------//
 
-answerButton.addEventListener("click", answerButtonHandler)
+// answerButton.addEventListener("click", answerButtonHandler)
 startButton.addEventListener("click", startButtonHandler)   
 initialButton.addEventListener("click", initialButtonHandler)
+
+
+loadInitials();
+
 //------------------------------------------------------------------//
 
 
