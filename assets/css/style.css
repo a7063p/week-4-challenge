@@ -6,7 +6,7 @@ box-sizing: border-box;
     --primary: #37216e;
     --secondary: #bc5fe6;
     --tertiary: #e3cced;
-    --grey: #c6c7d4
+    --grey: #acaaac
     font-size: 62.5%;
   }
 
@@ -33,33 +33,45 @@ box-sizing: border-box;
     max-height: 300px;
     flex-direction: column; 
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    flex-wrap: wrap;
+    }
+
+    ul {
+      padding:0 0 0 2px;
     }
  
 
-    .page-content {
-    flex: 1;
+    .page-content {    
     display: inline-block; 
     margin: 50px auto;
-    width: 50%;
+    width: 30%;
     text-align: center;     
     } 
 
-  .question-list {
-    list-style-type: none;
+    .question-list {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex-wrap: wrap;      
+      list-style-type: none;    
+  }
+
+  .wrapper{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;   
+
   }
 /*---------------------------------*/
   .answer-wrapper {
     display: flex;
-    flex: 1;
-    font-size: 25px;
-    color: var(--grey);
-    font-style: italic;
-    border-top-color: 5px solid red;
+    flex-wrap: wrap;
+    border-top: 3px solid #acaaac; 
   }
-    
- 
 
-    .start-btn {
+  
+  
+   .start-btn {
     text-align: center;
     outline: none;
     border: none;
@@ -76,7 +88,19 @@ box-sizing: border-box;
     cursor: pointer;
     } 
 
-    .all-done-btn {
+    .high-score-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      text-align: left;
+      justify-content: center;
+      flex-direction: column;
+      width: 65%;      
+    }
+
+    .all-done-btn,
+    .go-back-btn,
+    .clear-score-btn {
+      
     text-align: center;
     outline: none;
     border: none;
@@ -99,7 +123,6 @@ box-sizing: border-box;
     margin: 5px;    
     color: white;
     display: flex;    
-    flex: 1;
     padding: 10px 15px;
     background: var(--primary);
     font-size: 0.9rem;
@@ -113,15 +136,43 @@ box-sizing: border-box;
 
  
   .btn:hover,
-  .start-btn:hover {
+  .start-btn:hover,
+  .all-done-btn:hover,
+  .go-back-btn:hover,
+  .clear-score-btn.start-btn:hover {
     box-shadow: 0 2px var(--grey);
     top: -2px;
   }
   .btn:active,
-  .start-btn:active {
+  .start-btn:active,
+  .all-done-btn:active,
+  .go-back-btn:active,
+  .clear-score-btn:active{ 
     background-color: var(--secondary);
     box-shadow: 0 0px var(--grey);
     top: 0;
     
   }
 
+   .score-list{
+         list-style-type: none;
+
+  }
+
+.score-li { 
+ margin: 2px 0 0 2px;
+  background-color: #e3cced; 
+  border: 1px solid var(--grey);  
+}
+
+
+.hs-btn-wrapper {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.answer-response {
+  font-style: italic;
+  color:#acaaac ;
+  font-size: 25px;
+}

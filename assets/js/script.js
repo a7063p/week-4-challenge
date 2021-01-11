@@ -1,9 +1,13 @@
 
 var divGroupEl = document.querySelector("#page-content");
-var answerButton = document.querySelector("#page-content")
-var startButton = document.querySelector("#page-content")
+var answerButton = document.querySelector("#page-content");
+var startButton = document.querySelector("#page-content");
+var button = document.querySelector("#page-content");
 var timerEl = document.querySelector("#timer");
-var initialButton = document.querySelector('#page-content')
+var initialButton = document.querySelector('#page-content');
+var goBackButton = document.querySelector('#page-content');
+var clearHigh = document.querySelector('#page-content');
+
 
 
 var answerBtnId = 0;
@@ -83,20 +87,32 @@ var startButtonHandler = function (event) {
 
 var questionRepo = [
     {        
-        question: "what is your favorite color",
-        answers: ["red", "blue", "green", "gold"],
-        correctAnswer: "blue"
+        question: "JavaScript and Java are the same thing?",
+        answers: ["True", "False"],
+        correctAnswer: "True"
     },
 
     {        
-        question: "what is your favorite food",
-        answers: ["red", "blue", "green", "purple"],
-        correctAnswer: "purple" 
+        question: "A very useful tool used during development and debugging for printing content to the debugger is__________.",
+        answers: ["JavaScript", "terminal/bash", "for loops", "console.log"],
+        correctAnswer: "console.log" 
     },
+    
     {        
-        question: "what is your favorite car",
-        answers: ["toyota", "ford", "chevy", "Camaro"],
-        correctAnswer: "toyota"
+        question: "Commonly used Data types DO NOT include",
+        answers: ["strings", "booleans", "alerts", "numbers"],
+        correctAnswer: "alerts"
+    },
+    
+    {        
+        question: "Arrays in JavaScript can be used to store _________.",
+        answers: ["numbers and strings", "other arrays", "booleans", "all of the above"],
+        correctAnswer: "all of the above"
+    }, 
+    {        
+        question: "String values must be enclosed with _________ when being assigned to variables.",
+        answers: ["commas", "curly brackets", "quotes", "parenthesis"],
+        correctAnswer: "parenthesis"
     }
 ];
 
@@ -130,7 +146,7 @@ var testIndex = function() {
     
         var answer = testObj.correctAnswer
         ansIndex = testObj.answers.indexOf(answer);
-        console.log("Yes" + ansIndex);
+        
         // //---------------------------------------//
         var questionDivEl = document.createElement('div');
         questionDivEl.className = "wrapper";
@@ -168,8 +184,7 @@ var testIndex = function() {
 //----------------------------------------//
 
 var wrongAnswer = function() {
-    answerButton.removeEventListener("click", answerButtonHandler)
-    
+    answerButton.removeEventListener("click", answerButtonHandler)    
     
     var incorrectEl = document.createElement('div');
         incorrectEl.className = 'answer-wrapper';
@@ -177,8 +192,10 @@ var wrongAnswer = function() {
         divGroupEl.appendChild(incorrectEl) 
     
     var incorrectResponse = document.createElement('p');
-        incorrectResponse.textContent = "Wrong Answer";
+    incorrectResponse.className="answer-response"
+        incorrectResponse.textContent = "Wrong Answer!";
         incorrectEl.appendChild(incorrectResponse);
+        
 };
 
 
@@ -190,7 +207,8 @@ var correctAnswer = function() {
     divGroupEl.appendChild(correctEl); 
 
 var correctResponse = document.createElement('p');
-    correctResponse.textContent = "Correct";
+    correctResponse.textContent = "Correct!";
+    correctResponse.className="answer-response"
     correctEl.appendChild(correctResponse);      
 };
 
@@ -207,9 +225,10 @@ var highScoreHandler = function () {
 
 
 var highScore = function () {
-   
+       
     var allDoneDivEl = document.createElement('div');
-        allDoneDivEl.className= "wrapper"
+        allDoneDivEl.className= "all-done-wrapper"
+        allDoneDivEl.id = "all-done-id"
         divGroupEl.appendChild(allDoneDivEl);
 
         
@@ -248,9 +267,16 @@ var highScore = function () {
 }
 
 var initialInput = function () {
+    
     var score = timerLeft;
+
     var initial = document.querySelector('#initial-id').value
     console.log(initial);
+
+    if (initial === ""){
+        initial="High Score"
+    }
+
     var high = initial.toUpperCase() + "-" + score        
     viewHighScore.push(high)
     localStorage.setItem("initials", JSON.stringify(viewHighScore))
@@ -272,7 +298,8 @@ var loadInitials = function () {
 var highScoreList = function () {
 
 var scoreListEl = document.createElement('div');
-scoreListEl.className = "wrapper"
+scoreListEl.className = "high-score-wrapper";
+scoreListEl.id = "score-list-id";
 divGroupEl.appendChild(scoreListEl);
 
 
@@ -287,12 +314,15 @@ var scoreListUl = document.createElement('ul');
 
   for (var i = 0; i < viewHighScore.length; i++) {
 var scoreListLi = document.createElement("li");
+scoreListLi.className = "score-li"
 scoreListLi.textContent = viewHighScore[i];
 scoreListUl.appendChild(scoreListLi);
+
 }
 
 var scoreBtnDivEl = document.createElement('div');
-        scoreBtnDivEl.className = ('wrapper')
+        scoreBtnDivEl.className = ('hs-btn-wrapper')
+        scoreBtnDivEl.id = "score-div-id"
         scoreListEl.appendChild(scoreBtnDivEl);
 
         var goBackBtnEl = document.createElement('button')
@@ -313,19 +343,39 @@ var scoreBtnDivEl = document.createElement('div');
         scoreBtnDivEl.appendChild(clearScoreBtnEl);
 }
 
+//--------------GoBack Button-----------------//
+
+var goBackButtonHandler = function (event) {
+    if(event.target.matches('#go-back-btn-id')) {
+        window.location.reload()
+    }
+       
+}
+
+var clearHighScoreHandler = function(event) {
+    if(event.target.matches('#clear-score-btn-id')) {
+    localStorage.clear();
+    viewHighScore = [];
+    timerLeft = 60
+    deleteHighScoreList();
+    alert("All scores have been deleted!")
+    highScoreList();
+    }
+}
+
 //--------------initial button----------------//
 var initialButtonHandler = function(event) {
     event.preventDefault()
     if(event.target.matches('#all-done-btn-id')) {
         console.log(event.target);
+               
         initialInput()
-        // highScoreList()
+        deleteAllDone()
+        highScoreList()
         
     }
     
 }
-
-
 //-------------Answer Button------------------//
 //--------------------------------------------//
 var answerButtonHandler = function (event) {
@@ -344,13 +394,16 @@ var checkAnswer = function (questionId) {
 
     if (compareAnswer === selectAnswerId) {
         correctAnswer();  
-        setTimeout(delayChange, 1000);
+        setTimeout(delayChange, 500);
         
     } 
     else {
         wrongAnswer();
-        setTimeout(delayChange, 1000);
+        setTimeout(delayChange, 500);
         timerLeft = timerLeft - 10
+        if(timerLeft < 0) {
+            timerLeft = 0
+        }
         
     }
 };
@@ -369,20 +422,32 @@ var delayChange = function() {
 var deleteQuestion = function () {
     answerButton.addEventListener("click", answerButtonHandler)
     var divSelected = document.querySelector("#div-id");
-    divSelected.remove()    
+    divSelected.remove();    
 }
 var deleteResponse = function () {
     var divTwoSelected = document.querySelector("#div-two-id");
-    divTwoSelected.remove()    
+    divTwoSelected.remove();    
 }
+var deleteAllDone = function () {
+    var divAllDoneSelected = document.querySelector("#all-done-id");
+    divAllDoneSelected.remove();    
+}
+
+var deleteHighScoreList = function () {
+    var divHighScoreList = document.querySelector('#score-list-id');
+    divHighScoreList.remove();
+}
+
 
 /////////////////////////////////////////////////////
 
 //----------------EventsListeners-----------------------------//
 
-// answerButton.addEventListener("click", answerButtonHandler)
-startButton.addEventListener("click", startButtonHandler)   
-initialButton.addEventListener("click", initialButtonHandler)
+startButton.addEventListener("click", startButtonHandler); 
+answerButton.addEventListener("click", answerButtonHandler); 
+initialButton.addEventListener("click", initialButtonHandler);
+goBackButton.addEventListener("click", goBackButtonHandler);
+clearHigh.addEventListener("click", clearHighScoreHandler);
 
 
 loadInitials();
