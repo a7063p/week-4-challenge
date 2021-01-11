@@ -74,9 +74,9 @@ function countdown() {
         else if (timerLeft >= 1 ) {
         timerEl.textContent = timerLeft;
         timerLeft--;
-        console.log(stopTimer);
+        
         }
-    },250); 
+    },1000); 
     
     
 };
@@ -98,7 +98,7 @@ var questionRepo = [
     {        
         question: "JavaScript and Java are the same thing?",
         answers: ["True", "False"],
-        correctAnswer: "True"
+        correctAnswer: "False"
     },
 
     {        
