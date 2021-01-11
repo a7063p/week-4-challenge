@@ -13,3 +13,9 @@ so the USER can gauge their progress compared to other users.
 * The remaining time, if any, will be the users score.
 * The user will be prompted to enter their initials to locally save their best time/score.
 
+week-4 challenge URL:
+https://a7063p.github.io/week-4-challenge/
+
+week-4 challenge GIT:
+https://github.com/a7063p/week-4-challenge.git
+
