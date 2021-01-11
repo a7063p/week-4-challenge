@@ -18,9 +18,9 @@ box-sizing: border-box;
     flex-wrap: wrap;
     height: 65PX;
   }
-  .high-score-link {
+  /* .high-score-cls {
       color: var(--secondary);
-  } 
+  }  */
 
   body {
     background: whitesmoke;
@@ -132,6 +132,15 @@ box-sizing: border-box;
     box-shadow: 0 3px var(--grey);
     width: 200px;
     cursor: pointer;        
+  }
+
+  .hs-btn {
+    color:var(--secondary);
+    background-color: whitesmoke;
+    border: none;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1rem;
+    outline: none;
   }
 
  

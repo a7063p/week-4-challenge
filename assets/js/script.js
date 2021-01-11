@@ -7,7 +7,7 @@ var timerEl = document.querySelector("#timer");
 var initialButton = document.querySelector('#page-content');
 var goBackButton = document.querySelector('#page-content');
 var clearHigh = document.querySelector('#page-content');
-
+var hsView = document.querySelector('#head-content')
 
 
 var answerBtnId = 0;
@@ -16,42 +16,45 @@ var timerLeft = 60;
 timerEl.textContent = 60;
 var indexValue= 0;
 var endGame = false;
+var stopTimer = false
 var endQuestions = false;
 var viewHighScore = [];
 
-// ///////////////////////////////////////////////////////////////////////////////////////////////
+
+//-------------------start quiz function------------------------//
 
 
 var startQuiz = function () {
     var startDivEl = document.createElement('div');
     startDivEl.className = "start-wrapper";
     startDivEl.id = "div-id";    
-        divGroupEl.appendChild(startDivEl);
-    
-        var startTitleEl = document.createElement('h2');
-        startTitleEl.textContent = " Coding Quiz Challenge"
-        startTitleEl.setAttribute('style', 'text-align:center')
-        startDivEl.appendChild(startTitleEl);
+    divGroupEl.appendChild(startDivEl);
 
-        var quizDetailsEl = document.createElement('p');
-        quizDetailsEl.textContent = "Try to answer the following code-related questions within the time limit.Keep in mind that incorrect answers will penalize your score/time by 10 seconds!";
-        quizDetailsEl.setAttribute('style', 'font-size:15px; font-weight lighter; text-align:center;')
-        startDivEl.appendChild(quizDetailsEl);
+    var startTitleEl = document.createElement('h2');
+    startTitleEl.textContent = " Coding Quiz Challenge"
+    startTitleEl.setAttribute('style', 'text-align:center');
+    startDivEl.appendChild(startTitleEl);
 
-        var startBtnDivEl = document.createElement('div');
-        startBtnDivEl.className = 'button-wrapper';
-        startDivEl.appendChild(startBtnDivEl);
+    var quizDetailsEl = document.createElement('p');
+    quizDetailsEl.textContent = "Try to answer the following code-related questions within the time limit.Keep in mind that incorrect answers will penalize your score/time by 10 seconds!";
+    quizDetailsEl.setAttribute('style', 'font-size:15px; font-weight lighter; text-align:center;')
+    startDivEl.appendChild(quizDetailsEl);
 
-        var startBtnEl = document.createElement('button')
-        startBtnEl.textContent = "Start Quiz";
-        startBtnEl.className = "start-btn";
-        startBtnEl.id = "start-btn-id"
-        startBtnEl.setAttribute("style", "text-align:center;")
-        startBtnEl.type = "button"
-        startBtnDivEl.appendChild(startBtnEl);
-    };    
+    var startBtnDivEl = document.createElement('div');
+    startBtnDivEl.className = 'button-wrapper';
+    startDivEl.appendChild(startBtnDivEl);
+
+    var startBtnEl = document.createElement('button');
+    startBtnEl.textContent = "Start Quiz";
+    startBtnEl.className = "start-btn";
+    startBtnEl.id = "start-btn-id"
+    startBtnEl.setAttribute("style", "text-align:center;");
+    startBtnEl.type = "button"
+    startBtnDivEl.appendChild(startBtnEl);
+};    
 
     startQuiz();
+//----------------------------------------------------------------///
 
 //----------Timer----------------------//
 
@@ -64,26 +67,32 @@ function countdown() {
         clearInterval(setTimeInterval);
         timerEl.textContent=timerLeft;  
         highScoreHandler();      
-        } else if (timerLeft >= 1 ) {
+        } 
+        else if(stopTimer === true){
+            clearInterval(setTimeInterval);
+        }        
+        else if (timerLeft >= 1 ) {
         timerEl.textContent = timerLeft;
         timerLeft--;
-    } 
-    },1000);    
+        console.log(stopTimer);
+        }
+    },250); 
+    
+    
 };
-
-  //-------------Start Button------------------//
 //--------------------------------------------//
 
+  //-------------Start Button handler------------------//
 
 var startButtonHandler = function (event) {
     if(event.target.matches("#start-btn-id")) {
-    console.log(event.target); 
-    deleteQuestion()
-    testIndex()
-    countdown()
+    deleteQuestion();
+    testIndex();
+    countdown();
     }   
 };
 
+//-------------------------------question array---------------------------------//
 
 var questionRepo = [
     {        
@@ -119,7 +128,7 @@ var questionRepo = [
 var testIndex = function() {
     for (var i =0; i < questionRepo.length; i++) {       
             
-            var testObj = questionRepo[indexValue]            
+            var testObj = questionRepo[indexValue] ;           
             if( testObj === undefined) { 
                 endGame= true
                 endQuestions = true            
@@ -129,8 +138,7 @@ var testIndex = function() {
             selectedQuestionRepo = [];
             selectedQuestionRepo.push(testObj);
             indexValue++;
-            console.log(testObj.question); 
-            createQuestion(testObj)
+            createQuestion(testObj);
             return;        
              
          }
@@ -138,58 +146,59 @@ var testIndex = function() {
         
 }
 
+//------------------------------------------------------------//
 
-//-------Create Questions--------------//
+
+//-------Create Questions function --------------//
 
      var createQuestion = function(testObj) {
         //---answer index--------------//
     
-        var answer = testObj.correctAnswer
-        ansIndex = testObj.answers.indexOf(answer);
-        
-        // //---------------------------------------//
-        var questionDivEl = document.createElement('div');
-        questionDivEl.className = "wrapper";
-        questionDivEl.id = "div-id";    
-        divGroupEl.appendChild(questionDivEl);
+    var answer = testObj.correctAnswer;
+    ansIndex = testObj.answers.indexOf(answer);
+    
+    var questionDivEl = document.createElement('div');
+    questionDivEl.className = "wrapper";
+    questionDivEl.id = "div-id";    
+    divGroupEl.appendChild(questionDivEl);
 
-        var questionTitleEl = document.createElement('h2');
-        questionDivEl.appendChild(questionTitleEl);
+    var questionTitleEl = document.createElement('h2');
+    questionDivEl.appendChild(questionTitleEl);
 
-        var questions = document.createElement('p');
-        questions.textContent = testObj.question;
-        questionTitleEl.appendChild(questions);
+    var questions = document.createElement('p');
+    questions.textContent = testObj.question;
+    questionTitleEl.appendChild(questions);
 
-        var answerEl = document.createElement('ul');
-            answerEl.className = "question-list";
-        questionTitleEl.appendChild(answerEl);
+    var answerEl = document.createElement('ul');
+        answerEl.className = "question-list";
+    questionTitleEl.appendChild(answerEl);
 
-          for (var i = 0; i < testObj.answers.length; i++) {
+        for (var i = 0; i < testObj.answers.length; i++) {
     var answerListEl = document.createElement("li");
         answerEl.appendChild(answerListEl);
 
-    var answerBtn = document.createElement('button')
+    var answerBtn = document.createElement('button');
     answerBtn.textContent = testObj.answers[i];
     answerBtn.className = "btn";
-    answerBtn.setAttribute("data-btn-id", answerBtnId )
-    answerBtn.type = "button"
+    answerBtn.setAttribute("data-btn-id", answerBtnId);
+    answerBtn.type = "button";
     answerListEl.appendChild(answerBtn);
     answerBtnId++;
     }          
 }; 
+//----------------------------------------//
 
 
 
 // --------Create Response Div------------//
-//----------------------------------------//
 
 var wrongAnswer = function() {
-    answerButton.removeEventListener("click", answerButtonHandler)    
+    answerButton.removeEventListener("click", answerButtonHandler);   
     
     var incorrectEl = document.createElement('div');
         incorrectEl.className = 'answer-wrapper';
         incorrectEl.id = "div-two-id"; 
-        divGroupEl.appendChild(incorrectEl) 
+        divGroupEl.appendChild(incorrectEl); 
     
     var incorrectResponse = document.createElement('p');
     incorrectResponse.className="answer-response"
@@ -200,7 +209,7 @@ var wrongAnswer = function() {
 
 
 var correctAnswer = function() {
-    answerButton.removeEventListener("click", answerButtonHandler)
+    answerButton.removeEventListener("click", answerButtonHandler);
     var correctEl = document.createElement('div');
     correctEl.className = "answer-wrapper";
     correctEl.id = "div-two-id"; 
@@ -208,11 +217,12 @@ var correctAnswer = function() {
 
 var correctResponse = document.createElement('p');
     correctResponse.textContent = "Correct!";
-    correctResponse.className="answer-response"
+    correctResponse.className="answer-response";
     correctEl.appendChild(correctResponse);      
 };
 
 //-------------------------------------------//
+
 //-------------All Done----------------------//
 var highScoreHandler = function () {
     if(endGame === false) {
@@ -225,10 +235,11 @@ var highScoreHandler = function () {
 
 
 var highScore = function () {
+    deleteViewHs();
        
     var allDoneDivEl = document.createElement('div');
-        allDoneDivEl.className= "all-done-wrapper"
-        allDoneDivEl.id = "all-done-id"
+        allDoneDivEl.className= "all-done-wrapper";
+        allDoneDivEl.id = "all-done-id";
         divGroupEl.appendChild(allDoneDivEl);
 
         
@@ -271,11 +282,10 @@ var initialInput = function () {
     var score = timerLeft;
 
     var initial = document.querySelector('#initial-id').value
-    console.log(initial);
-
+    
     if (initial === ""){
         initial="High Score"
-    }
+    };
 
     var high = initial.toUpperCase() + "-" + score        
     viewHighScore.push(high)
@@ -287,13 +297,13 @@ var loadInitials = function () {
     if(localStorage.getItem("initials")=== null){
         return false 
     } else
-    viewHighScore = localStorage.getItem("initials");    
-    
-    console.log("Found High Scores")
+    viewHighScore = localStorage.getItem("initials");     
     viewHighScore = JSON.parse(viewHighScore);
-    console.log(viewHighScore);
+    
 }
 //--------------------------------------------//
+
+//-----------------------High Score List----------------------//
 
 var highScoreList = function () {
 
@@ -304,7 +314,7 @@ divGroupEl.appendChild(scoreListEl);
 
 
 var scoreListTitleEl = document.createElement('h2');
-scoreListTitleEl.textContent = "High Scores"
+scoreListTitleEl.textContent = "High Scores";
 scoreListEl.appendChild(scoreListTitleEl);
 
 
@@ -314,83 +324,86 @@ var scoreListUl = document.createElement('ul');
 
   for (var i = 0; i < viewHighScore.length; i++) {
 var scoreListLi = document.createElement("li");
-scoreListLi.className = "score-li"
+scoreListLi.className = "score-li";
 scoreListLi.textContent = viewHighScore[i];
 scoreListUl.appendChild(scoreListLi);
 
 }
 
 var scoreBtnDivEl = document.createElement('div');
-        scoreBtnDivEl.className = ('hs-btn-wrapper')
-        scoreBtnDivEl.id = "score-div-id"
-        scoreListEl.appendChild(scoreBtnDivEl);
+    scoreBtnDivEl.className = ('hs-btn-wrapper');
+    scoreBtnDivEl.id = "score-div-id"
+    scoreListEl.appendChild(scoreBtnDivEl);
 
-        var goBackBtnEl = document.createElement('button')
-        goBackBtnEl.textContent = "Go Back";
-        goBackBtnEl.className = "go-back-btn";
-        goBackBtnEl.id = "go-back-btn-id"
-        goBackBtnEl.setAttribute("style", "text-align:center;")
-        goBackBtnEl.type = "button"
-        scoreBtnDivEl.appendChild(goBackBtnEl);
+    var goBackBtnEl = document.createElement('button')
+    goBackBtnEl.textContent = "Go Back";
+    goBackBtnEl.className = "go-back-btn";
+    goBackBtnEl.id = "go-back-btn-id";
+    goBackBtnEl.setAttribute("style", "text-align:center;");
+    goBackBtnEl.type = "button";
+    scoreBtnDivEl.appendChild(goBackBtnEl);
 
 
-        var clearScoreBtnEl = document.createElement('button')
-        clearScoreBtnEl.textContent = "Clear High Score";
-        clearScoreBtnEl.className = "clear-score-btn";
-        clearScoreBtnEl.id = "clear-score-btn-id"
-        clearScoreBtnEl.setAttribute("style", "text-align:center;")
-        clearScoreBtnEl.type = "button"
-        scoreBtnDivEl.appendChild(clearScoreBtnEl);
+    var clearScoreBtnEl = document.createElement('button');
+    clearScoreBtnEl.textContent = "Clear High Score";
+    clearScoreBtnEl.className = "clear-score-btn";
+    clearScoreBtnEl.id = "clear-score-btn-id";
+    clearScoreBtnEl.setAttribute("style", "text-align:center;");
+    clearScoreBtnEl.type = "button";
+    scoreBtnDivEl.appendChild(clearScoreBtnEl);
 }
 
-//--------------GoBack Button-----------------//
+//--------------GoBack Button / clear high Score-----------------//
 
 var goBackButtonHandler = function (event) {
     if(event.target.matches('#go-back-btn-id')) {
         window.location.reload()
-    }
+    };
        
 }
 
 var clearHighScoreHandler = function(event) {
     if(event.target.matches('#clear-score-btn-id')) {
     localStorage.clear();
-    viewHighScore = [];
-    timerLeft = 60
+    viewHighScore = [];    
     deleteHighScoreList();
-    alert("All scores have been deleted!")
+    alert("All scores have been deleted!");
     highScoreList();
     }
 }
+//---------------------------------------------//
+
 
 //--------------initial button----------------//
 var initialButtonHandler = function(event) {
     event.preventDefault()
     if(event.target.matches('#all-done-btn-id')) {
-        console.log(event.target);
-               
-        initialInput()
-        deleteAllDone()
-        highScoreList()
-        
-    }
-    
-}
-//-------------Answer Button------------------//
+                  
+        initialInput();
+        deleteAllDone();
+        highScoreList();       
+    }    
+};
+
 //--------------------------------------------//
+
+
+//-------------Answer Button------------------//
+
 var answerButtonHandler = function (event) {
     if(event.target.matches(".btn")) {
-    console.log(event.target);
     var questionId = parseInt (event.target.getAttribute("data-btn-id"));    
         
-    checkAnswer(questionId) 
+    checkAnswer(questionId);
     }   
 };  
 
-//--------------Check Answers------------}
+
+//--------------Check Answers------------//
+
 var checkAnswer = function (questionId) {
-    var compareAnswer = ansIndex
-    var selectAnswerId = questionId   
+    var compareAnswer = ansIndex;
+    var selectAnswerId = questionId ;  
 
     if (compareAnswer === selectAnswerId) {
         correctAnswer();  
@@ -405,16 +418,25 @@ var checkAnswer = function (questionId) {
             timerLeft = 0
         }
         
-    }
+    };
 };
 
 //-------------------SetTimeOt Function---------------//
 
 var delayChange = function() {
     answerBtnId=0;
-    deleteQuestion()
-    deleteResponse()
-    testIndex()    
+    deleteQuestion();
+    deleteResponse();
+    testIndex();  
+}
+
+var viewHsHandler = function(event) {
+    if(event.target.matches('#hs-btn-id')) {
+        stopTimer = true
+        deleteQuestion()        
+        highScoreList();
+        
+    }
 }
 
 //-------------------Delete Functions----------------//
@@ -438,8 +460,13 @@ var deleteHighScoreList = function () {
     divHighScoreList.remove();
 }
 
+var deleteViewHs = function () {
+    var deleteViewHsBtn = document.querySelector('#hs-btn-id');
+    deleteViewHsBtn.remove();
+}
 
-/////////////////////////////////////////////////////
+
+
 
 //----------------EventsListeners-----------------------------//
 
@@ -448,7 +475,7 @@ answerButton.addEventListener("click", answerButtonHandler);
 initialButton.addEventListener("click", initialButtonHandler);
 goBackButton.addEventListener("click", goBackButtonHandler);
 clearHigh.addEventListener("click", clearHighScoreHandler);
-
+hsView.addEventListener('click', viewHsHandler);
 
 loadInitials();
 
